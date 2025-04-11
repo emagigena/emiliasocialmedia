@@ -1,0 +1,91 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: 19 17 90; /* 13115A - dark purple */
+  --secondary: 48 107 172; /* 306BAC - blue */
+  --accent: 111 156 235; /* 6F9CEB - light blue */
+  --highlight: 145 196 153; /* 91C499 - green */
+}
+
+.dark {
+  --background: 10 10 10;
+  --foreground: 255 255 255;
+  --card: 20 20 20;
+  --card-foreground: 255 255 255;
+  --popover: 20 20 20;
+  --popover-foreground: 255 255 255;
+  --muted: 40 40 40;
+  --muted-foreground: 200 200 200;
+  --border: 40 40 40;
+  --input: 40 40 40;
+}
+
+/* Basic styles */
+body {
+  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+}
+
+/* Simple custom classes without @apply */
+.title-emilia {
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.subtitle-social {
+  font-weight: 200;
+  text-transform: lowercase;
+  letter-spacing: 0.05em;
+}
+
+.section-title {
+  font-size: 1.875rem;
+  line-height: 2.25rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #13115a;
+}
+
+.dark .section-title {
+  color: #ffffff;
+}
+
+@media (min-width: 768px) {
+  .section-title {
+    font-size: 2.25rem;
+    line-height: 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-title {
+    font-size: 3rem;
+    line-height: 1;
+  }
+}
+
+.section-subtitle {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  color: #306bac;
+}
+
+.dark .section-subtitle {
+  color: #6f9ceb;
+}
+
+@media (min-width: 768px) {
+  .section-subtitle {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+/* Smooth scrolling for the entire page */
+html {
+  scroll-behavior: smooth;
+}
