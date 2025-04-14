@@ -34,7 +34,7 @@ const ProjectsSection = ({ projects }: ProjectsSectionProps) => {
 
 const ProjectCard = ({ project }: { project: Project }) => {
   return (
-    <Card className="bg-secondary-foreground overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl h-full">
+    <Card className="overflow-hidden rounded-lg shadow-lg transition-all duration-300 hover:shadow-xl h-full">
       <div className="relative h-64 w-full overflow-hidden">
         <Image
           src={project.imageUrl || "/placeholder.svg"}

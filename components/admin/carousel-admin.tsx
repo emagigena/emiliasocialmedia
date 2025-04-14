@@ -1,5 +1,7 @@
 "use client"
 
+import type React from "react"
+
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
@@ -9,48 +11,28 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
 import { ArrowLeft, Upload, Trash2, MoveUp, MoveDown } from "lucide-react"
 import Link from "next/link"
+import { updateCarouselItems, uploadImage } from "@/lib/actions"
 
-// Mock carousel items - in a real app, these would come from your database
-const initialCarouselItems = [
-  {
-    id: "1",
-    title: "Community Management",
-    description: "Potenciamos tu presencia en redes sociales con estrategias efectivas",
-    ctaText: "Conoce más",
-    ctaLink: "#services",
-    imageUrl: "/placeholder.svg?height=800&width=1600",
-  },
-  {
-    id: "2",
-    title: "Fotografía y Video",
-    description: "Capturamos la esencia de tu marca con contenido visual de alta calidad",
-    ctaText: "Ver portafolio",
-    ctaLink: "#projects",
-    imageUrl: "/placeholder.svg?height=800&width=1600",
-  },
-  {
-    id: "3",
-    title: "Desarrollo Web",
-    description: "Creamos sitios web modernos y funcionales que destacan tu negocio",
-    ctaText: "Nuestros servicios",
-    ctaLink: "#services",
-    imageUrl: "/placeholder.svg?height=800&width=1600",
-  },
-  {
-    id: "4",
-    title: "Diseño Gráfico",
-    description: "Diseñamos la identidad visual que tu marca necesita para destacar",
-    ctaText: "Contáctanos",
-    ctaLink: "#contact",
-    imageUrl: "/placeholder.svg?height=800&width=1600",
-  },
-]
+// Define the carousel item type
+interface CarouselItem {
+  id: string
+  title: string
+  description: string
+  ctaText: string
+  ctaLink: string
+  imageUrl: string
+}
 
-export default function CarouselAdmin() {
+interface CarouselAdminProps {
+  initialItems: CarouselItem[]
+}
+
+export default function CarouselAdmin({ initialItems }: CarouselAdminProps) {
   const router = useRouter()
   const { toast } = useToast()
-  const [carouselItems, setCarouselItems] = useState(initialCarouselItems)
+  const [carouselItems, setCarouselItems] = useState(initialItems)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [uploadingImageId, setUploadingImageId] = useState<string | null>(null)
 
   const handleMoveUp = (index: number) => {
     if (index === 0) return
@@ -75,6 +57,15 @@ export default function CarouselAdmin() {
   }
 
   const handleDelete = (index: number) => {
+    if (carouselItems.length <= 1) {
+      toast({
+        title: "Error",
+        description: "Debe haber al menos un slide en el carousel.",
+        variant: "destructive",
+      })
+      return
+    }
+
     const newItems = [...carouselItems]
     newItems.splice(index, 1)
     setCarouselItems(newItems)
@@ -93,18 +84,76 @@ export default function CarouselAdmin() {
     setCarouselItems([...carouselItems, newItem])
   }
 
-  const handleSave = () => {
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>, itemId: string) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingImageId(itemId)
+
+    try {
+      const formData = new FormData()
+      formData.append("file", file)
+
+      const result = await uploadImage(formData)
+
+      if (result.success) {
+        const newItems = carouselItems.map((item) => (item.id === itemId ? { ...item, imageUrl: result.url ?? ""
+        } : item))
+
+        setCarouselItems(newItems)
+
+        toast({
+          title: "Imagen subida",
+          description: "La imagen ha sido subida correctamente.",
+          variant: "default",
+        })
+      } else {
+        toast({
+          title: "Error",
+          description: result.message || "Hubo un problema al subir la imagen.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Hubo un problema al subir la imagen.",
+        variant: "destructive",
+      })
+    } finally {
+      setUploadingImageId(null)
+    }
+  }
+
+  const handleSave = async () => {
     setIsSubmitting(true)
 
-    // In a real app, you would save this to your database
-    setTimeout(() => {
+    try {
+      const result = await updateCarouselItems(carouselItems)
+
+      if (result.success) {
+        toast({
+          title: "Cambios guardados",
+          description: "Los cambios en el carousel han sido guardados correctamente.",
+          variant: "default",
+        })
+        router.refresh()
+      } else {
+        toast({
+          title: "Error",
+          description: result.message || "Hubo un problema al guardar los cambios.",
+          variant: "destructive",
+        })
+      }
+    } catch (error) {
       toast({
-        title: "Cambios guardados",
-        description: "Los cambios en el carousel han sido guardados correctamente.",
-        variant: "default",
+        title: "Error",
+        description: "Hubo un problema al guardar los cambios.",
+        variant: "destructive",
       })
+    } finally {
       setIsSubmitting(false)
-    }, 1000)
+    }
   }
 
   return (
@@ -152,6 +201,7 @@ export default function CarouselAdmin() {
                         size="icon"
                         onClick={() => handleDelete(index)}
                         className="text-red-500 hover:text-red-700"
+                        disabled={carouselItems.length <= 1}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>
@@ -220,6 +270,11 @@ export default function CarouselAdmin() {
                           alt={item.title}
                           className="h-full w-full object-cover"
                         />
+                        {uploadingImageId === item.id && (
+                          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-50 text-white">
+                            Subiendo...
+                          </div>
+                        )}
                       </div>
                       <label
                         htmlFor={`image-${item.id}`}
@@ -227,7 +282,14 @@ export default function CarouselAdmin() {
                       >
                         <Upload className="h-4 w-4 mr-2" />
                         <span className="text-sm">Cambiar imagen</span>
-                        <Input id={`image-${item.id}`} type="file" accept="image/*" className="hidden" />
+                        <Input
+                          id={`image-${item.id}`}
+                          type="file"
+                          accept="image/*"
+                          className="hidden"
+                          onChange={(e) => handleImageUpload(e, item.id)}
+                          disabled={uploadingImageId !== null}
+                        />
                       </label>
                     </div>
                   </div>

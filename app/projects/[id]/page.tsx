@@ -1,7 +1,7 @@
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
-import { getProjectById } from "@/lib/projects"
+import { getProjectById, getProjects } from "@/lib/actions"
 import { Button } from "@/components/ui/button"
 import { ArrowLeft } from "lucide-react"
 
@@ -17,6 +17,13 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   if (!project) {
     notFound()
   }
+
+  // Get related projects (excluding current project)
+  const allProjects = await getProjects()
+  const relatedProjects = allProjects
+    .filter((p) => p.id !== params.id)
+    .filter((p) => p.category === project.category)
+    .slice(0, 3)
 
   return (
     <div className="container mx-auto py-16 px-4">
@@ -71,22 +78,29 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
         </div>
       </div>
 
-      <div className="mt-16">
-        <h2 className="text-2xl font-bold mb-8 text-center">Otros Proyectos</h2>
+      {relatedProjects.length > 0 && (
+        <div className="mt-16">
+          <h2 className="text-2xl font-bold mb-8 text-center">Otros Proyectos</h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* This would be populated with related projects in a real application */}
-          <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
-            <p className="text-gray-500">Proyecto relacionado</p>
-          </div>
-          <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
-            <p className="text-gray-500">Proyecto relacionado</p>
-          </div>
-          <div className="bg-gray-100 h-64 rounded-lg flex items-center justify-center">
-            <p className="text-gray-500">Proyecto relacionado</p>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {relatedProjects.map((relatedProject) => (
+              <Link key={relatedProject.id} href={`/projects/${relatedProject.id}`} className="block">
+                <div className="relative h-64 rounded-lg overflow-hidden group">
+                  <Image
+                    src={relatedProject.imageUrl || "/placeholder.svg"}
+                    alt={relatedProject.title}
+                    fill
+                    className="object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <h3 className="text-white text-xl font-bold text-center px-4">{relatedProject.title}</h3>
+                  </div>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

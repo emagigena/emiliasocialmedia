@@ -60,6 +60,7 @@ const Navbar = () => {
           <div className="hidden md:flex items-center space-x-8">
             <nav className="flex space-x-8">
               <NavLink href="#home" label="Inicio" onClick={scrollToSection} />
+              <NavLink href="#services" label="Servicios" onClick={scrollToSection} />
               <NavLink href="#projects" label="Proyectos" onClick={scrollToSection} />
               <NavLink href="#about" label="Nosotros" onClick={scrollToSection} />
               <NavLink href="#contact" label="Contacto" onClick={scrollToSection} />
@@ -84,6 +85,7 @@ const Navbar = () => {
         <div className="md:hidden bg-white shadow-lg">
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
             <MobileNavLink href="#home" label="Inicio" onClick={scrollToSection} />
+            <MobileNavLink href="#services" label="Servicios" onClick={scrollToSection} />
             <MobileNavLink href="#projects" label="Proyectos" onClick={scrollToSection} />
             <MobileNavLink href="#about" label="Nosotros" onClick={scrollToSection} />
             <MobileNavLink href="#contact" label="Contacto" onClick={scrollToSection} />

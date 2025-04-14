@@ -10,7 +10,18 @@ import { useToast } from "@/hooks/use-toast"
 import { Mail, Phone, MapPin, BriefcaseBusiness, Users } from "lucide-react"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-const ContactSection = () => {
+interface ContactInfo {
+  email: string
+  phone: string
+  location: string
+  hours: string
+}
+
+interface ContactSectionProps {
+  contactInfo: ContactInfo
+}
+
+const ContactSection = ({ contactInfo }: ContactSectionProps) => {
   const { toast } = useToast()
   const [isSubmitting, setIsSubmitting] = useState(false)
 
@@ -94,7 +105,7 @@ const ContactSection = () => {
                     <SelectTrigger>
                       <SelectValue placeholder="Selecciona un servicio" />
                     </SelectTrigger>
-                    <SelectContent style={{ backgroundColor: "white" }}>
+                    <SelectContent>
                       <SelectItem value="community">Community Management</SelectItem>
                       <SelectItem value="photo">Fotografía y Video</SelectItem>
                       <SelectItem value="web">Desarrollo Web</SelectItem>
@@ -112,7 +123,7 @@ const ContactSection = () => {
                     <SelectTrigger>
                       <SelectValue placeholder="Selecciona un rango" />
                     </SelectTrigger>
-                    <SelectContent style={{ backgroundColor: "white" }}>
+                    <SelectContent>
                       <SelectItem value="low">Menos de $500</SelectItem>
                       <SelectItem value="medium">$500 - $1000</SelectItem>
                       <SelectItem value="high">$1000 - $2000</SelectItem>
@@ -153,7 +164,7 @@ const ContactSection = () => {
                     <Mail className="mr-4 h-6 w-6 text-[#91C499]" />
                     <div>
                       <h4 className="font-medium">Email</h4>
-                      <p className="text-gray-300">info@emiliasf.com</p>
+                      <p className="text-gray-300">{contactInfo.email}</p>
                     </div>
                   </div>
 
@@ -161,7 +172,7 @@ const ContactSection = () => {
                     <Phone className="mr-4 h-6 w-6 text-[#91C499]" />
                     <div>
                       <h4 className="font-medium">Teléfono</h4>
-                      <p className="text-gray-300">+123 456 7890</p>
+                      <p className="text-gray-300">{contactInfo.phone}</p>
                     </div>
                   </div>
 
@@ -169,7 +180,7 @@ const ContactSection = () => {
                     <MapPin className="mr-4 h-6 w-6 text-[#91C499]" />
                     <div>
                       <h4 className="font-medium">Ubicación</h4>
-                      <p className="text-gray-300">Ciudad, País</p>
+                      <p className="text-gray-300">{contactInfo.location}</p>
                     </div>
                   </div>
                 </div>
@@ -177,7 +188,7 @@ const ContactSection = () => {
 
               <div className="mt-12">
                 <h4 className="font-medium mb-2">Horario de atención</h4>
-                <p className="text-gray-300">Lunes a Viernes: 9:00 AM - 6:00 PM</p>
+                <p className="text-gray-300">{contactInfo.hours}</p>
               </div>
             </div>
           </div>
@@ -231,7 +242,7 @@ const ContactSection = () => {
                     <SelectTrigger>
                       <SelectValue placeholder="Selecciona un área" />
                     </SelectTrigger>
-                    <SelectContent style={{ backgroundColor: "white" }}>
+                    <SelectContent>
                       <SelectItem value="community">Community Manager</SelectItem>
                       <SelectItem value="photo">Fotógrafo/Videógrafo</SelectItem>
                       <SelectItem value="web">Desarrollador Web</SelectItem>
@@ -249,7 +260,7 @@ const ContactSection = () => {
                     <SelectTrigger>
                       <SelectValue placeholder="Selecciona tu nivel de experiencia" />
                     </SelectTrigger>
-                    <SelectContent style={{ backgroundColor: "white" }}>
+                    <SelectContent>
                       <SelectItem value="junior">Junior (0-2 años)</SelectItem>
                       <SelectItem value="mid">Semi-Senior (2-4 años)</SelectItem>
                       <SelectItem value="senior">Senior (4+ años)</SelectItem>
@@ -325,9 +336,9 @@ const ContactSection = () => {
               </p>
             </div>
           </div>
-        </TabsContent >
-      </Tabs >
-    </div >
+        </TabsContent>
+      </Tabs>
+    </div>
   )
 }
 

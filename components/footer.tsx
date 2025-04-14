@@ -26,10 +26,10 @@ const Footer = () => {
           <div>
             <h3 className="text-xl font-semibold mb-4">Servicios</h3>
             <ul className="space-y-2">
-              <FooterLink href="#" label="Community Management" />
-              <FooterLink href="#" label="Fotografía y Video" />
-              <FooterLink href="#" label="Desarrollo Web" />
-              <FooterLink href="#" label="Diseño Gráfico" />
+              <FooterLink href="#services" label="Community Management" />
+              <FooterLink href="#services" label="Fotografía y Video" />
+              <FooterLink href="#services" label="Desarrollo Web" />
+              <FooterLink href="#services" label="Diseño Gráfico" />
             </ul>
           </div>
 
@@ -37,6 +37,7 @@ const Footer = () => {
             <h3 className="text-xl font-semibold mb-4">Enlaces Rápidos</h3>
             <ul className="space-y-2">
               <FooterLink href="#home" label="Inicio" />
+              <FooterLink href="#services" label="Servicios" />
               <FooterLink href="#projects" label="Proyectos" />
               <FooterLink href="#about" label="Nosotros" />
               <FooterLink href="#contact" label="Contacto" />

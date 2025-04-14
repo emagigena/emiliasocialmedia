@@ -2,32 +2,40 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Variables básicas */
 :root {
-  --primary: 19 17 90; /* 13115A - dark purple */
-  --secondary: 48 107 172; /* 306BAC - blue */
-  --accent: 111 156 235; /* 6F9CEB - light blue */
-  --highlight: 145 196 153; /* 91C499 - green */
+  /* Colores principales */
+  --color-primary: #13115a;
+  --color-secondary: #306bac;
+  --color-accent: #6f9ceb;
+  --color-highlight: #91c499;
+
+  /* Colores de fondo y texto */
+  --color-background: #ffffff;
+  --color-foreground: #000000;
+  --color-text: #333333;
+  --color-text-light: #666666;
+
+  /* Colores de componentes */
+  --color-card: #ffffff;
+  --color-card-foreground: #333333;
+  --color-border: #eeeeee;
+  --color-input: #f5f5f5;
+  --color-muted: #f5f5f5;
+  --color-muted-foreground: #666666;
+
+  /* Otros */
+  --radius: 0.5rem;
 }
 
-.dark {
-  --background: 10 10 10;
-  --foreground: 255 255 255;
-  --card: 20 20 20;
-  --card-foreground: 255 255 255;
-  --popover: 20 20 20;
-  --popover-foreground: 255 255 255;
-  --muted: 40 40 40;
-  --muted-foreground: 200 200 200;
-  --border: 40 40 40;
-  --input: 40 40 40;
-}
-
-/* Basic styles */
+/* Estilos básicos */
 body {
-  @apply bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+  background-color: var(--color-background);
+  color: var(--color-text);
+  font-family: var(--font-poppins), sans-serif;
 }
 
-/* Simple custom classes without @apply */
+/* Clases para títulos y textos */
 .title-emilia {
   font-weight: 800;
   text-transform: uppercase;
@@ -45,11 +53,7 @@ body {
   line-height: 2.25rem;
   font-weight: 700;
   margin-bottom: 1.5rem;
-  color: #13115a;
-}
-
-.dark .section-title {
-  color: #ffffff;
+  color: var(--color-primary);
 }
 
 @media (min-width: 768px) {
@@ -71,11 +75,7 @@ body {
   line-height: 1.75rem;
   font-weight: 500;
   margin-bottom: 1rem;
-  color: #306bac;
-}
-
-.dark .section-subtitle {
-  color: #6f9ceb;
+  color: var(--color-secondary);
 }
 
 @media (min-width: 768px) {
@@ -85,7 +85,37 @@ body {
   }
 }
 
-/* Smooth scrolling for the entire page */
+/* Smooth scrolling para toda la página */
 html {
   scroll-behavior: smooth;
+}
+
+/* Estilos para componentes shadcn/ui */
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+/* Estilos para formularios */
+input,
+textarea,
+select {
+  background-color: var(--color-input);
+  border: 1px solid var(--color-border);
+}
+
+/* Estilos para botones */
+button {
+  border-radius: var(--radius);
+}
+
+/* Estilos para cards */
+.card {
+  background-color: var(--color-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
 }
