@@ -5,52 +5,36 @@ import Image from "next/image"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 
-// Placeholder carousel items - these would come from your database in production
-const carouselItems = [
-  {
-    id: 1,
-    image: "/placeholder.svg?height=800&width=1600",
-    title: "Community Management",
-    description: "Potenciamos tu presencia en redes sociales con estrategias efectivas",
-    ctaText: "Conoce más",
-    ctaLink: "#services",
-  },
-  {
-    id: 2,
-    image: "/placeholder.svg?height=800&width=1600",
-    title: "Fotografía y Video",
-    description: "Capturamos la esencia de tu marca con contenido visual de alta calidad",
-    ctaText: "Ver portafolio",
-    ctaLink: "#projects",
-  },
-  {
-    id: 3,
-    image: "/placeholder.svg?height=800&width=1600",
-    title: "Desarrollo Web",
-    description: "Creamos sitios web modernos y funcionales que destacan tu negocio",
-    ctaText: "Nuestros servicios",
-    ctaLink: "#services",
-  },
-  {
-    id: 4,
-    image: "/placeholder.svg?height=800&width=1600",
-    title: "Diseño Gráfico",
-    description: "Diseñamos la identidad visual que tu marca necesita para destacar",
-    ctaText: "Contáctanos",
-    ctaLink: "#contact",
-  },
-]
+// Define the carousel item type
+interface CarouselItem {
+  id: string
+  title: string
+  description: string
+  ctaText: string
+  ctaLink: string
+  imageUrl: string
+}
 
-const HeroCarousel = () => {
+interface HeroCarouselProps {
+  items: CarouselItem[]
+}
+
+const HeroCarousel = ({ items }: HeroCarouselProps) => {
   const [currentSlide, setCurrentSlide] = useState(0)
   const [isAutoPlaying, setIsAutoPlaying] = useState(true)
 
+  // Aseguramos que todos los botones del carousel redirijan a la sección de proyectos
+  const processedItems = items.map((item) => ({
+    ...item,
+    ctaLink: "#projects", // Forzamos que todos los enlaces vayan a la sección de proyectos
+  }))
+
   const nextSlide = () => {
-    setCurrentSlide((prev) => (prev === carouselItems.length - 1 ? 0 : prev + 1))
+    setCurrentSlide((prev) => (prev === processedItems.length - 1 ? 0 : prev + 1))
   }
 
   const prevSlide = () => {
-    setCurrentSlide((prev) => (prev === 0 ? carouselItems.length - 1 : prev - 1))
+    setCurrentSlide((prev) => (prev === 0 ? processedItems.length - 1 : prev - 1))
   }
 
   const goToSlide = (index: number) => {
@@ -79,7 +63,7 @@ const HeroCarousel = () => {
       onMouseLeave={resumeAutoplay}
     >
       {/* Carousel Items */}
-      {carouselItems.map((item, index) => (
+      {processedItems.map((item, index) => (
         <div
           key={item.id}
           className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
@@ -89,7 +73,7 @@ const HeroCarousel = () => {
           {/* Background Image */}
           <div className="absolute inset-0">
             <Image
-              src={item.image || "/placeholder.svg"}
+              src={item.imageUrl || "/placeholder.svg"}
               alt={item.title}
               fill
               priority={index === 0}
@@ -105,7 +89,7 @@ const HeroCarousel = () => {
               <h1 className="mb-4 text-4xl font-bold md:text-5xl lg:text-6xl">{item.title}</h1>
               <p className="mb-8 text-lg md:text-xl">{item.description}</p>
               <Button asChild className="bg-[#306BAC] hover:bg-[#6F9CEB] text-white px-8 py-3 text-lg">
-                <a href={item.ctaLink}>{item.ctaText}</a>
+                <a href="#projects">{item.ctaText}</a>
               </Button>
             </div>
           </div>
@@ -130,7 +114,7 @@ const HeroCarousel = () => {
 
       {/* Indicators */}
       <div className="absolute bottom-8 left-0 right-0 z-20 flex justify-center space-x-2">
-        {carouselItems.map((_, index) => (
+        {processedItems.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}

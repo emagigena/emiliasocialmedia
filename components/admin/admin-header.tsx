@@ -22,7 +22,7 @@ export default function AdminHeader() {
   }
 
   return (
-    <header className="bg-white shadow-sm py-4">
+    <header className="bg-white shadow-sm py-4 z-10 relative">
       <div className="container mx-auto px-4 flex items-center justify-between">
         <Link href="/admin/dashboard" className="flex items-center">
           <span className="title-emilia text-xl text-[#13115A]">EMILIA</span>

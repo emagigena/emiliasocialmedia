@@ -40,20 +40,15 @@ const messages = [
 export default function MessagesPage() {
   return (
     <div className="container mx-auto py-10 px-4">
-      <h1 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Mensajes de Contacto</h1>
+      <h1 className="text-3xl font-bold mb-8 text-gray-900">Mensajes de Contacto</h1>
 
       <div className="space-y-6">
         {messages.map((message) => (
-          <Card
-            key={message.id}
-            className={`dark:bg-gray-800 dark:border-gray-700 ${
-              !message.read ? "border-l-4 border-l-[#306BAC] dark:border-l-[#6F9CEB]" : ""
-            }`}
-          >
+          <Card key={message.id} className={`${!message.read ? "border-l-4 border-l-[#306BAC]" : ""}`}>
             <CardHeader className="pb-2">
               <div className="flex justify-between items-start">
-                <CardTitle className="text-xl dark:text-white">{message.name}</CardTitle>
-                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                <CardTitle className="text-xl">{message.name}</CardTitle>
+                <div className="flex items-center text-sm text-gray-500">
                   <Calendar className="h-4 w-4 mr-1" />
                   {new Date(message.date).toLocaleDateString()}
                 </div>
@@ -61,35 +56,28 @@ export default function MessagesPage() {
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-                <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
+                <div className="flex items-center text-sm text-gray-600">
                   <Mail className="h-4 w-4 mr-2 text-gray-400" />
                   <span>{message.email}</span>
                 </div>
-                <div className="flex items-center text-sm text-gray-600 dark:text-gray-300">
+                <div className="flex items-center text-sm text-gray-600">
                   <Tag className="h-4 w-4 mr-2 text-gray-400" />
                   <span>{message.service}</span>
                 </div>
                 <div className="flex items-center">
                   {!message.read && (
-                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                    <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                       Nuevo
                     </span>
                   )}
                 </div>
               </div>
 
-              <p className="text-gray-700 dark:text-gray-300 mb-4">{message.message}</p>
+              <p className="text-gray-700 mb-4">{message.message}</p>
 
               <div className="flex justify-end space-x-3">
-                <Button
-                  variant="outline"
-                  className="dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:border-gray-600"
-                >
-                  Marcar como {message.read ? "no leído" : "leído"}
-                </Button>
-                <Button className="bg-[#13115A] hover:bg-[#306BAC] dark:bg-[#306BAC] dark:hover:bg-[#6F9CEB] text-white">
-                  Responder
-                </Button>
+                <Button variant="outline">Marcar como {message.read ? "no leído" : "leído"}</Button>
+                <Button className="bg-[#13115A] hover:bg-[#306BAC] text-white">Responder</Button>
               </div>
             </CardContent>
           </Card>
@@ -97,7 +85,7 @@ export default function MessagesPage() {
 
         {messages.length === 0 && (
           <div className="text-center py-12">
-            <p className="text-gray-500 dark:text-gray-400">No hay mensajes para mostrar.</p>
+            <p className="text-gray-500">No hay mensajes para mostrar.</p>
           </div>
         )}
       </div>

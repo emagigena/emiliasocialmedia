@@ -15,7 +15,7 @@ let projects: Project[] = [
     category: "Community Management",
     imageUrl: "/placeholder.svg?height=400&width=600",
     detailedDescription:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc, quis nisl.",
+      "Desarrollamos una estrategia integral de contenido para las plataformas de Instagram y Facebook de esta marca de moda. El enfoque se centró en crear contenido auténtico y atractivo que resonara con su audiencia objetivo. Implementamos un calendario editorial coherente, creamos contenido visual de alta calidad y gestionamos la interacción con la comunidad. Como resultado, la marca experimentó un aumento del 45% en el engagement, un crecimiento del 30% en seguidores y un incremento del 25% en el tráfico a su tienda online.",
     client: "Fashion Brand",
     date: "2023-05-15",
   },
@@ -26,11 +26,22 @@ let projects: Project[] = [
     category: "Fotografía",
     imageUrl: "/placeholder.svg?height=400&width=600",
     detailedDescription:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam euismod, nisl eget aliquam ultricies, nunc nisl aliquet nunc, quis aliquam nisl nunc quis nisl.",
+      "Realizamos una sesión fotográfica profesional para una línea de productos gourmet, con el objetivo de crear imágenes atractivas para su catálogo digital y redes sociales. Adoptamos un enfoque minimalista y elegante que resaltara la calidad y exclusividad de los productos. El trabajo incluyó la dirección de arte, iluminación profesional, composición cuidadosa y post-producción detallada. Las imágenes resultantes ayudaron a la marca a mejorar su presencia online y aumentar sus ventas en un 35%.",
     client: "Gourmet Foods",
     date: "2023-06-22",
   },
-  // ... otros proyectos
+  {
+    id: "3",
+    title: "Desarrollo Web para Estudio de Arquitectura",
+    description:
+      "Sitio web responsive con galería de proyectos, sistema de filtrado y formulario de contacto personalizado.",
+    category: "Desarrollo Web",
+    imageUrl: "/placeholder.svg?height=400&width=600",
+    detailedDescription:
+      "Diseñamos y desarrollamos un sitio web moderno y elegante para un estudio de arquitectura, con enfoque en mostrar su portafolio de proyectos de manera visual e impactante. El sitio incluye una galería de proyectos con sistema de filtrado por categorías, páginas detalladas para cada proyecto con galerías de imágenes, un blog integrado para compartir noticias y artículos, y un formulario de contacto personalizado. El diseño es completamente responsive y optimizado para SEO, lo que ha resultado en un aumento del 60% en consultas de potenciales clientes.",
+    client: "Estudio Arquitectura",
+    date: "2023-07-10",
+  },
 ]
 
 // Mock database for team members
@@ -49,8 +60,65 @@ let teamMembers: TeamMember[] = [
     bio: "Especialista en estrategias de redes sociales y creación de contenido que genera engagement y conversiones para nuestros clientes.",
     imageUrl: "/placeholder.svg?height=400&width=400",
   },
-  // ... otros miembros del equipo
+  {
+    id: "3",
+    name: "Laura Martínez",
+    position: "Fotógrafa Principal",
+    bio: "Fotógrafa profesional con ojo para el detalle y la composición. Especializada en fotografía de producto, moda y eventos corporativos.",
+    imageUrl: "/placeholder.svg?height=400&width=400",
+  },
+  {
+    id: "4",
+    name: "Miguel Sánchez",
+    position: "Desarrollador Web",
+    bio: "Experto en desarrollo frontend y backend con amplia experiencia en la creación de sitios web y aplicaciones personalizadas.",
+    imageUrl: "/placeholder.svg?height=400&width=400",
+  },
 ]
+
+// Mock carousel items
+let carouselItems = [
+  {
+    id: "1",
+    title: "Community Management",
+    description: "Potenciamos tu presencia en redes sociales con estrategias efectivas",
+    ctaText: "Conoce más",
+    ctaLink: "#services",
+    imageUrl: "/placeholder.svg?height=800&width=1600",
+  },
+  {
+    id: "2",
+    title: "Fotografía y Video",
+    description: "Capturamos la esencia de tu marca con contenido visual de alta calidad",
+    ctaText: "Ver portafolio",
+    ctaLink: "#projects",
+    imageUrl: "/placeholder.svg?height=800&width=1600",
+  },
+  {
+    id: "3",
+    title: "Desarrollo Web",
+    description: "Creamos sitios web modernos y funcionales que destacan tu negocio",
+    ctaText: "Nuestros servicios",
+    ctaLink: "#services",
+    imageUrl: "/placeholder.svg?height=800&width=1600",
+  },
+  {
+    id: "4",
+    title: "Diseño Gráfico",
+    description: "Diseñamos la identidad visual que tu marca necesita para destacar",
+    ctaText: "Contáctanos",
+    ctaLink: "#contact",
+    imageUrl: "/placeholder.svg?height=800&width=1600",
+  },
+]
+
+// Contact information
+let contactInfo = {
+  email: "info@emiliasf.com",
+  phone: "+123 456 7890",
+  location: "Ciudad, País",
+  hours: "Lunes a Viernes: 9:00 AM - 6:00 PM",
+}
 
 // Contact form submission
 export async function sendContactForm(formData: FormData) {
@@ -144,8 +212,11 @@ export async function uploadImage(formData: FormData) {
       }
     }
 
+    // Generate a unique filename
+    const uniqueFilename = `${Date.now()}-${file.name.replace(/\s+/g, "-")}`
+
     // Upload to Vercel Blob
-    const blob = await put(file.name, file, {
+    const blob = await put(uniqueFilename, file, {
       access: "public",
     })
 
@@ -494,6 +565,50 @@ export async function deleteTeamMember(id: string) {
   }
 }
 
+// Update carousel items
+export async function updateCarouselItems(items: typeof carouselItems) {
+  try {
+    // Update carousel items
+    carouselItems = items
+
+    // Revalidate paths
+    revalidatePath("/")
+
+    return {
+      success: true,
+      message: "Carousel actualizado correctamente.",
+    }
+  } catch (error) {
+    console.error("Error updating carousel:", error)
+    return {
+      success: false,
+      message: "Hubo un error al actualizar el carousel. Por favor intenta de nuevo.",
+    }
+  }
+}
+
+// Update contact information
+export async function updateContactInfo(info: typeof contactInfo) {
+  try {
+    // Update contact info
+    contactInfo = info
+
+    // Revalidate paths
+    revalidatePath("/")
+
+    return {
+      success: true,
+      message: "Información de contacto actualizada correctamente.",
+    }
+  } catch (error) {
+    console.error("Error updating contact info:", error)
+    return {
+      success: false,
+      message: "Hubo un error al actualizar la información de contacto. Por favor intenta de nuevo.",
+    }
+  }
+}
+
 // Admin login
 export async function adminLogin(formData: FormData) {
   try {
@@ -538,4 +653,14 @@ export async function getTeamMembers(): Promise<TeamMember[]> {
 // Get team member by ID (for use in server components)
 export async function getTeamMemberById(id: string): Promise<TeamMember | null> {
   return teamMembers.find((member) => member.id === id) || null
+}
+
+// Get carousel items (for use in server components)
+export async function getCarouselItems() {
+  return carouselItems
+}
+
+// Get contact information (for use in server components)
+export async function getContactInfo() {
+  return contactInfo
 }

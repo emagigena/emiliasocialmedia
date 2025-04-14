@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss"
+import { fontFamily } from "tailwindcss/defaultTheme"
 
 const config: Config = {
   darkMode: ["class"],
@@ -25,20 +26,12 @@ const config: Config = {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         primary: {
-          DEFAULT: "#13115A", // Dark purple
+          DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
-          DEFAULT: "#306BAC", // Blue
+          DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
-        },
-        accent: {
-          DEFAULT: "#6F9CEB", // Light blue
-          foreground: "hsl(var(--accent-foreground))",
-        },
-        highlight: {
-          DEFAULT: "#91C499", // Green
-          foreground: "hsl(var(--highlight-foreground))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -47,6 +40,10 @@ const config: Config = {
         muted: {
           DEFAULT: "hsl(var(--muted))",
           foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
         },
         popover: {
           DEFAULT: "hsl(var(--popover))",
@@ -63,7 +60,7 @@ const config: Config = {
         sm: "calc(var(--radius) - 4px)",
       },
       fontFamily: {
-        sans: ["var(--font-poppins)", "sans-serif"],
+        sans: ["var(--font-poppins)", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {

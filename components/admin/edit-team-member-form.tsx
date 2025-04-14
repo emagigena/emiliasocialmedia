@@ -69,10 +69,10 @@ export default function EditTeamMemberForm({ member }: EditTeamMemberFormProps) 
   }
 
   return (
-    <Card className="dark:bg-gray-800 dark:border-gray-700">
+    <Card>
       <CardContent className="p-6">
         <div className="mb-6">
-          <Button asChild variant="ghost" className="mb-4 dark:text-gray-300">
+          <Button asChild variant="ghost" className="mb-4">
             <Link href="/admin/team">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver al equipo
@@ -83,61 +83,43 @@ export default function EditTeamMemberForm({ member }: EditTeamMemberFormProps) 
         <form action={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-700">
                 Nombre Completo
               </label>
-              <Input
-                id="name"
-                name="name"
-                required
-                defaultValue={member.name}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              />
+              <Input id="name" name="name" required defaultValue={member.name} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="position" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="position" className="block text-sm font-medium text-gray-700">
                 Cargo
               </label>
-              <Input
-                id="position"
-                name="position"
-                required
-                defaultValue={member.position}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              />
+              <Input id="position" name="position" required defaultValue={member.position} />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="bio" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="bio" className="block text-sm font-medium text-gray-700">
               Biografía
             </label>
-            <Textarea
-              id="bio"
-              name="bio"
-              required
-              defaultValue={member.bio}
-              className="min-h-[150px] dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            />
+            <Textarea id="bio" name="bio" required defaultValue={member.bio} className="min-h-[150px]" />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700">
               Fotografía
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label
                   htmlFor="image"
-                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
+                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-50"
                 >
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <Upload className="h-8 w-8 text-gray-400 mb-2" />
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-500">
                       <span className="font-medium">Haz clic para cambiar</span> o arrastra y suelta
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF hasta 10MB</p>
+                    <p className="text-xs text-gray-500">PNG, JPG, GIF hasta 10MB</p>
                   </div>
                   <Input
                     id="image"
@@ -159,19 +141,10 @@ export default function EditTeamMemberForm({ member }: EditTeamMemberFormProps) 
           </div>
 
           <div className="flex justify-end space-x-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push("/admin/team")}
-              className="dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:border-gray-600"
-            >
+            <Button type="button" variant="outline" onClick={() => router.push("/admin/team")}>
               Cancelar
             </Button>
-            <Button
-              type="submit"
-              className="bg-[#13115A] hover:bg-[#306BAC] dark:bg-[#306BAC] dark:hover:bg-[#6F9CEB] text-white"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" className="bg-[#13115A] hover:bg-[#306BAC] text-white" disabled={isSubmitting}>
               {isSubmitting ? "Guardando..." : "Guardar Cambios"}
             </Button>
           </div>

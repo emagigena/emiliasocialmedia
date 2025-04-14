@@ -47,7 +47,7 @@ const AboutSection = ({ teamMembers }: AboutSectionProps) => {
 
 const TeamMemberCard = ({ member }: { member: TeamMember }) => {
   return (
-    <Card className="overflow-hidden bg-secondary-foreground">
+    <Card className="overflow-hidden">
       <div className="relative h-64 w-full">
         <Image src={member.imageUrl || "/placeholder.svg"} alt={member.name} fill className="object-cover" />
       </div>

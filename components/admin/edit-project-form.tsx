@@ -70,10 +70,10 @@ export default function EditProjectForm({ project }: EditProjectFormProps) {
   }
 
   return (
-    <Card className="dark:bg-gray-800 dark:border-gray-700">
+    <Card>
       <CardContent className="p-6">
         <div className="mb-6">
-          <Button asChild variant="ghost" className="mb-4 dark:text-gray-300">
+          <Button asChild variant="ghost" className="mb-4">
             <Link href="/admin/projects">
               <ArrowLeft className="h-4 w-4 mr-2" />
               Volver a proyectos
@@ -84,27 +84,21 @@ export default function EditProjectForm({ project }: EditProjectFormProps) {
         <form action={handleSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
                 Título del Proyecto
               </label>
-              <Input
-                id="title"
-                name="title"
-                required
-                defaultValue={project.title}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              />
+              <Input id="title" name="title" required defaultValue={project.title} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="category" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="category" className="block text-sm font-medium text-gray-700">
                 Categoría
               </label>
               <Select name="category" defaultValue={project.category}>
-                <SelectTrigger className="dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <SelectTrigger>
                   <SelectValue placeholder="Selecciona una categoría" />
                 </SelectTrigger>
-                <SelectContent className="dark:bg-gray-800 dark:border-gray-700">
+                <SelectContent>
                   <SelectItem value="Community Management">Community Management</SelectItem>
                   <SelectItem value="Fotografía">Fotografía</SelectItem>
                   <SelectItem value="Video">Video</SelectItem>
@@ -116,46 +110,34 @@ export default function EditProjectForm({ project }: EditProjectFormProps) {
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
               Descripción Breve
             </label>
-            <Textarea
-              id="description"
-              name="description"
-              required
-              defaultValue={project.description}
-              maxLength={150}
-              className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-            />
+            <Textarea id="description" name="description" required defaultValue={project.description} maxLength={150} />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="detailedDescription" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="detailedDescription" className="block text-sm font-medium text-gray-700">
               Descripción Detallada
             </label>
             <Textarea
               id="detailedDescription"
               name="detailedDescription"
               defaultValue={project.detailedDescription || ""}
-              className="min-h-[150px] dark:bg-gray-700 dark:border-gray-600 dark:text-white"
+              className="min-h-[150px]"
             />
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
-              <label htmlFor="client" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="client" className="block text-sm font-medium text-gray-700">
                 Cliente
               </label>
-              <Input
-                id="client"
-                name="client"
-                defaultValue={project.client || ""}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
-              />
+              <Input id="client" name="client" defaultValue={project.client || ""} />
             </div>
 
             <div className="space-y-2">
-              <label htmlFor="date" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+              <label htmlFor="date" className="block text-sm font-medium text-gray-700">
                 Fecha de Realización
               </label>
               <Input
@@ -163,27 +145,26 @@ export default function EditProjectForm({ project }: EditProjectFormProps) {
                 name="date"
                 type="date"
                 defaultValue={project.date ? new Date(project.date).toISOString().split("T")[0] : ""}
-                className="dark:bg-gray-700 dark:border-gray-600 dark:text-white"
               />
             </div>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="image" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+            <label htmlFor="image" className="block text-sm font-medium text-gray-700">
               Imagen del Proyecto
             </label>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
                 <label
                   htmlFor="image"
-                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-50 dark:border-gray-600 dark:hover:bg-gray-700"
+                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed rounded-md cursor-pointer hover:bg-gray-50"
                 >
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <Upload className="h-8 w-8 text-gray-400 mb-2" />
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                    <p className="text-sm text-gray-500">
                       <span className="font-medium">Haz clic para cambiar</span> o arrastra y suelta
                     </p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400">PNG, JPG, GIF hasta 10MB</p>
+                    <p className="text-xs text-gray-500">PNG, JPG, GIF hasta 10MB</p>
                   </div>
                   <Input
                     id="image"
@@ -205,19 +186,10 @@ export default function EditProjectForm({ project }: EditProjectFormProps) {
           </div>
 
           <div className="flex justify-end space-x-4">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => router.push("/admin/projects")}
-              className="dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600 dark:border-gray-600"
-            >
+            <Button type="button" variant="outline" onClick={() => router.push("/admin/projects")}>
               Cancelar
             </Button>
-            <Button
-              type="submit"
-              className="bg-[#13115A] hover:bg-[#306BAC] dark:bg-[#306BAC] dark:hover:bg-[#6F9CEB] text-white"
-              disabled={isSubmitting}
-            >
+            <Button type="submit" className="bg-[#13115A] hover:bg-[#306BAC] text-white" disabled={isSubmitting}>
               {isSubmitting ? "Guardando..." : "Guardar Cambios"}
             </Button>
           </div>
