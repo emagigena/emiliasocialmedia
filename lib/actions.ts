@@ -255,11 +255,11 @@ export async function addProject(formData: FormData) {
     }
 
     // Upload image to Vercel Blob
-    const imageUpload = await uploadImage(new FormData().append("file", file))
+    const imageFormData = new FormData()
+    imageFormData.append("file", file)
 
-    if (!imageUpload.success) {
-      return imageUpload
-    }
+    const imageUpload = await uploadImage(imageFormData)
+    if (!imageUpload.success) return imageUpload
 
     // Create new project
     const newProject: Project = {
@@ -267,7 +267,7 @@ export async function addProject(formData: FormData) {
       title,
       description,
       category,
-      imageUrl: imageUpload.url,
+      imageUrl: imageUpload.url ?? 'fallback.jpg',
       detailedDescription,
       client,
       date,
@@ -304,7 +304,7 @@ export async function updateProject(formData: FormData) {
     const detailedDescription = formData.get("detailedDescription") as string
     const client = formData.get("client") as string
     const date = formData.get("date") as string
-    const file = formData.get("image") as File | null
+    const file = formData.get("image") as File
 
     // Validate form data
     if (!id || !title || !description || !category) {
@@ -327,15 +327,14 @@ export async function updateProject(formData: FormData) {
     let imageUrl = projects[projectIndex].imageUrl
 
     // Upload new image if provided
-    if (file && file.size > 0) {
-      const imageUpload = await uploadImage(new FormData().append("file", file))
+    const imageFormData = new FormData()
+    imageFormData.append("file", file)
+    const imageUpload = await uploadImage(imageFormData)
 
-      if (!imageUpload.success) {
-        return imageUpload
-      }
-
-      imageUrl = imageUpload.url
+    if (!imageUpload.success) {
+      return imageUpload
     }
+
 
     // Update project
     projects[projectIndex] = {
@@ -424,7 +423,9 @@ export async function addTeamMember(formData: FormData) {
     }
 
     // Upload image to Vercel Blob
-    const imageUpload = await uploadImage(new FormData().append("file", file))
+    const imageFormData = new FormData()
+    imageFormData.append("file", file)
+    const imageUpload = await uploadImage(imageFormData)
 
     if (!imageUpload.success) {
       return imageUpload
@@ -436,7 +437,7 @@ export async function addTeamMember(formData: FormData) {
       name,
       position,
       bio,
-      imageUrl: imageUpload.url,
+      imageUrl: imageUpload.url ?? "fallback.jpg",
     }
 
     // Add to team members array
@@ -467,7 +468,7 @@ export async function updateTeamMember(formData: FormData) {
     const name = formData.get("name") as string
     const position = formData.get("position") as string
     const bio = formData.get("bio") as string
-    const file = formData.get("image") as File | null
+    const file = formData.get("image") as File
 
     // Validate form data
     if (!id || !name || !position || !bio) {
@@ -490,15 +491,10 @@ export async function updateTeamMember(formData: FormData) {
     let imageUrl = teamMembers[memberIndex].imageUrl
 
     // Upload new image if provided
-    if (file && file.size > 0) {
-      const imageUpload = await uploadImage(new FormData().append("file", file))
-
-      if (!imageUpload.success) {
-        return imageUpload
-      }
-
-      imageUrl = imageUpload.url
-    }
+    const imageFormData = new FormData()
+    imageFormData.append("file", file)
+    const imageUpload = await uploadImage(imageFormData)
+    if (!imageUpload.success) return imageUpload
 
     // Update team member
     teamMembers[memberIndex] = {
