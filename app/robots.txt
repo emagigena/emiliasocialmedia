@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://emiliasocialmedia.com/sitemap.xml
+
+# Directorios restringidos
+Disallow: /admin/
+Disallow: /api/

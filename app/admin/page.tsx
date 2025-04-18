@@ -1,115 +1,90 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { useToast } from "@/hooks/use-toast"
-import { setCookie } from "cookies-next"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import CarouselManager from "./components/carousel-manager"
+import ProjectsManager from "./components/projects-manager"
+import TeamManager from "./components/team-manager"
+import FooterManager from "./components/footer-manager"
+import ContactManager from "./components/contact-manager"
 
-export default function AdminLogin() {
+export default function AdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const router = useRouter()
-  const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [formData, setFormData] = useState({
-    username: "",
-    password: "",
-  })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
+  useEffect(() => {
+    // Set up basic auth credentials
+    const credentials = btoa("admin:password")
+
+    // Check if we're authenticated
+    fetch("/api/carousel", {
+      headers: {
+        Authorization: `Basic ${credentials}`,
+      },
     })
-  }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-
-    try {
-      // In a real application, you would validate credentials against a database
-      if (formData.username === "admin" && formData.password === "password") {
-        // Set a cookie to indicate the user is authenticated
-        setCookie("admin_authenticated", "true", {
-          maxAge: 60 * 60 * 24, // 1 day
-          path: "/",
-        })
-
-        toast({
-          title: "Inicio de sesión exitoso",
-          description: "Bienvenido al panel de administración.",
-          variant: "default",
-        })
-
-        router.push("/admin/dashboard")
-      } else {
-        toast({
-          title: "Error de inicio de sesión",
-          description: "Credenciales inválidas. Por favor intenta de nuevo.",
-          variant: "destructive",
-        })
-      }
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Hubo un problema al iniciar sesión. Inténtalo de nuevo.",
-        variant: "destructive",
+      .then((response) => {
+        if (response.ok) {
+          setIsAuthenticated(true)
+        } else {
+          // If not authenticated, the middleware will handle the redirect
+          console.error("Authentication failed")
+        }
       })
-    } finally {
-      setIsSubmitting(false)
-    }
+      .catch((error) => {
+        console.error("Error checking authentication:", error)
+      })
+  }, [router])
+
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="p-8 text-center">
+          <h1 className="text-2xl font-bold mb-4">Autenticando...</h1>
+          <p>Si no eres redirigido, por favor verifica tus credenciales.</p>
+        </div>
+      </div>
+    )
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Acceso Administrativo</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div className="space-y-2">
-              <label htmlFor="username" className="text-sm font-medium">
-                Usuario
-              </label>
-              <Input
-                id="username"
-                name="username"
-                type="text"
-                required
-                placeholder="Nombre de usuario"
-                value={formData.username}
-                onChange={handleChange}
-              />
-            </div>
-            <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
-                Contraseña
-              </label>
-              <Input
-                id="password"
-                name="password"
-                type="password"
-                required
-                placeholder="Contraseña"
-                value={formData.password}
-                onChange={handleChange}
-              />
-            </div>
-            <Button type="submit" className="w-full bg-[#13115A] hover:bg-[#306BAC] text-white" disabled={isSubmitting}>
-              {isSubmitting ? "Iniciando sesión..." : "Iniciar sesión"}
-            </Button>
-          </form>
-          <div className="mt-4 text-center text-sm text-gray-500">
-            <p>Para fines de demostración, usa:</p>
-            <p>Usuario: admin / Contraseña: password</p>
-          </div>
-        </CardContent>
-      </Card>
+    <div className="min-h-screen bg-gray-100 p-4 md:p-8">
+      <div className="max-w-7xl mx-auto">
+        <header className="bg-white shadow-md rounded-lg p-6 mb-8">
+          <h1 className="text-2xl md:text-3xl font-bold text-primary-dark">Panel de Administración</h1>
+          <p className="text-gray-600">Gestiona el contenido de Emilia Social Media</p>
+        </header>
+
+        <Tabs defaultValue="carousel" className="bg-white shadow-md rounded-lg p-6">
+          <TabsList className="grid grid-cols-5 mb-8">
+            <TabsTrigger value="carousel">Carousel</TabsTrigger>
+            <TabsTrigger value="projects">Proyectos</TabsTrigger>
+            <TabsTrigger value="team">Equipo</TabsTrigger>
+            <TabsTrigger value="footer">Footer</TabsTrigger>
+            <TabsTrigger value="contact">Mensajes</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="carousel">
+            <CarouselManager />
+          </TabsContent>
+
+          <TabsContent value="projects">
+            <ProjectsManager />
+          </TabsContent>
+
+          <TabsContent value="team">
+            <TeamManager />
+          </TabsContent>
+
+          <TabsContent value="footer">
+            <FooterManager />
+          </TabsContent>
+
+          <TabsContent value="contact">
+            <ContactManager />
+          </TabsContent>
+        </Tabs>
+      </div>
     </div>
   )
 }

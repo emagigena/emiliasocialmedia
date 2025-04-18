@@ -1,28 +1,40 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-// This function can be marked `async` if using `await` inside
 export function middleware(request: NextRequest) {
-  // Check if the request is for the admin section
-  if (request.nextUrl.pathname.startsWith("/admin")) {
-    // Skip the login page from the check
-    if (request.nextUrl.pathname === "/admin") {
-      return NextResponse.next()
-    }
+  const pathname = request.nextUrl.pathname
 
-    // Check if the user is authenticated
-    const isAuthenticated = request.cookies.has("admin_authenticated")
+  // Only apply to /admin routes
+  if (pathname.startsWith("/admin")) {
+    const authHeader = request.headers.get("authorization")
 
-    if (!isAuthenticated) {
-      // Redirect to the login page if not authenticated
-      return NextResponse.redirect(new URL("/admin", request.url))
+    if (!authHeader || !isValidAuthHeader(authHeader)) {
+      return new NextResponse("Authentication Required", {
+        status: 401,
+        headers: {
+          "WWW-Authenticate": 'Basic realm="Secure Area"',
+        },
+      })
     }
   }
 
   return NextResponse.next()
 }
 
-// See "Matching Paths" below to learn more
+function isValidAuthHeader(authHeader: string): boolean {
+  if (!authHeader.startsWith("Basic ")) {
+    return false
+  }
+
+  // Extract the encoded credentials
+  const base64Credentials = authHeader.split(" ")[1]
+  const credentials = Buffer.from(base64Credentials, "base64").toString("ascii")
+  const [username, password] = credentials.split(":")
+
+  // Check against hardcoded credentials
+  return username === "admin" && password === "password"
+}
+
 export const config = {
-  matcher: ["/admin/:path*"],
+  matcher: "/admin/:path*",
 }
